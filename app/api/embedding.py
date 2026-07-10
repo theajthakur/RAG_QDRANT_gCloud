@@ -1,18 +1,12 @@
-from google import genai
 from google.genai import types
 from app.chunking.chunk import getAllChunks
 from qdrant_client.models import PointStruct
 from app.core.qdrant import client
 from uuid import uuid4
+from app.core.google import client_google
 
-client_g = genai.Client(
-    vertexai=True,
-    project="learncloud-501101",
-    location="asia-south1",
-)
-
-def getEmbeddings(query:list[str]):
-    response = client_g.models.embed_content(
+def getEmbeddings(query:list[str] | str):
+    response = client_google.models.embed_content(
         model="gemini-embedding-001",
         contents=query,
         config=types.EmbedContentConfig(
@@ -25,7 +19,7 @@ def getEmbeddings(query:list[str]):
 
 
 def save_embeddings():
-    
+
     all_chunks=getAllChunks()
     texts = [chunk.text for chunk in all_chunks]
     embeddings = getEmbeddings(texts)

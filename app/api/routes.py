@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from .embedding import getEmbeddings, save_embeddings
+from .controller import getVectorResult, generate_helper
+
 router= APIRouter()
 
 @router.get("/")
@@ -12,11 +13,29 @@ class UserInput(BaseModel):
 
 @router.post("/query")
 def fetchQuery(req: UserInput):
-    vectors=getEmbeddings(req.query)
+    search_result=getVectorResult(req.query)
     return {
         "query": req.query,
-        "embeddings":vectors
+        "search_results": search_result
     }
+
+@router.post("/generate")
+def generate_answer(query: UserInput):
+    res = getVectorResult(query.query)
+
+    data = {
+        "query": query.query,
+        "search_results": [
+            {
+                "id": str(point.id),
+                "score": point.score,
+                "payload": point.payload,
+            }
+            for point in res
+        ],
+    }
+
+    return generate_helper(data)
 
 # @router.get("/save")
 # def saveEmbed():
