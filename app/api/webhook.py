@@ -1,3 +1,5 @@
+from fastapi import FastAPI, Request
+from fastapi.responses import Response
 from twilio.twiml.messaging_response import MessagingResponse
 from fastapi import APIRouter
 from .controller import generate_answer
@@ -17,11 +19,12 @@ async def whatsapp_webhook(request: Request):
 
     reply="Not supported!"
 
-
     print(f"Message from {sender}: {incoming_message}")
+    with open("output.txt", "a", encoding="utf-8") as f:
+        f.write(f"Message from {sender}: {incoming_message}\n")
 
     if form.get("MessageType")=="text":
-        reply = generate_answer(query)
+        reply = generate_answer(query["query"])
     twiml = MessagingResponse()
     twiml.message(reply)
 
