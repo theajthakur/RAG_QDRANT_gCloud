@@ -28,3 +28,20 @@ def generate_helper(data: dict) -> str:
     )
 
     return response.text
+
+def generate_answer(query:str)->str:
+    res = getVectorResult(query)
+
+    data = {
+        "query": query,
+        "search_results": [
+            {
+                "id": str(point.id),
+                "score": point.score,
+                "payload": point.payload,
+            }
+            for point in res
+        ],
+    }
+
+    return generate_helper(data)
