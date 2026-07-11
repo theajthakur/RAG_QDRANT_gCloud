@@ -6,7 +6,7 @@ services:
     depends_on:
       - qdrant
     environment:
-      QDRANT_DOCUMENT: documents
+      QDRANT_COLLECTION: documents
       QDRANT_HOST: qdrant
       QDRANT_PORT: 6333
 
