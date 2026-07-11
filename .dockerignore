@@ -1,0 +1,12 @@
+qdrant_data
+venv
+.git
+.gitignore
+compose.yaml
+.env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+output.txt
