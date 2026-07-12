@@ -10,5 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Start deployment
-        run: echo "Deployment started"
+      - name: SSH into VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            whoami
+            pwd
+            hostname
